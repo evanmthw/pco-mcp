@@ -260,3 +260,37 @@ def find_songs_by_tags(tag_names: list[str]) -> list:
     endpoint = f'/services/v2/songs?{tag_filters}'
 
     return _iterate_all(endpoint, **{'where[hidden]': 'false'})
+
+
+@mcp.tool()
+def get_series() -> list:
+    """
+    Fetch all series from Planning Center Online.
+    Returns all series, handling pagination automatically.
+    """
+    return _iterate_all('/services/v2/series')
+
+
+@mcp.tool()
+def get_series_by_id(series_id: str) -> dict:
+    """
+    Fetch details for a specific series.
+
+    Args:
+        series_id: The ID of the series.
+    """
+    response = pco.get(f'/services/v2/series/{series_id}')
+    return response['data']
+
+
+@mcp.tool()
+def get_series_artwork(series_id: str) -> dict:
+    """
+    Fetch artwork URLs for a specific series.
+    Returns series data including artwork URLs in various sizes (thumbnail, medium, original).
+
+    Args:
+        series_id: The ID of the series.
+    """
+    response = pco.get(f'/services/v2/series/{series_id}')
+    return response['data']
